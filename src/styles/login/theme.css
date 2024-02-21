@@ -1,0 +1,25 @@
+@import url(../../styles/login/login.css);
+/*定义样式 主题名称*/
+:root[theme='time-0'] {
+    /*登录背景图片*/
+    --login-back-image: var(--login-back-image-month-0);
+}
+:root[theme='time-1'] {
+    /*登录背景图片*/
+    --login-back-image: var(--login-back-image-month-1);
+}
+/*定义样式 主题名称*/
+:root[theme='time-2'] {
+    /*登录背景图片*/
+    --login-back-image: var(--login-back-image-month-2);
+}
+/*定义样式 主题名称*/
+:root[theme='time-3'] {
+    /*登录背景图片*/
+    --login-back-image: var(--login-back-image-month-3);
+}
+/*定义样式 主题名称*/
+:root[theme='time-4'] {
+    /*登录背景图片*/
+    --login-back-image: var(--login-back-image-month-4);
+}

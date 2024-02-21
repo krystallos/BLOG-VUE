@@ -1,0 +1,9 @@
+@charset "UTF-8";
+:root {
+  /* background */
+  --login-back-image-month-0: url('../../assets/static_images/login/firewatch_0.jpg');
+  --login-back-image-month-1: url('../../assets/static_images/login/firewatch_1.jpg');
+  --login-back-image-month-2: url('../../assets/static_images/login/firewatch_2.jpg');
+  --login-back-image-month-3: url('../../assets/static_images/login/firewatch_3.jpg');
+  --login-back-image-month-4: url('../../assets/static_images/login/firewatch_4.jpg');
+}
