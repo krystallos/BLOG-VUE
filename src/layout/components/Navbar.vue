@@ -17,7 +17,7 @@
           <div @click="getAppLink">
             <el-dropdown-item><span style="font-weight: 400;">获取APP</span></el-dropdown-item>
           </div>
-          <router-link to="/">
+          <router-link to="/mineBlosDescription">
             <el-dropdown-item><span style="font-weight: 400;">关于网站</span></el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">

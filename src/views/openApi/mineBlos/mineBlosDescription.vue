@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="topMenu" :class="isTopMenu === true ? 'disabledClass2' : 'disabledClass1'">
+    <div v-if="userKey != null" class="topMenu" :class="isTopMenu === true ? 'disabledClass2' : 'disabledClass1'">
       <div>
         <a href="#/login" class="topcenter"><i class="el-icon-s-home"></i>加入我们</a>
         <a :href="'#/mineBlos?ids=' + userKey" class="topcenter"><i class="el-icon-s-management"></i>回到主站</a>

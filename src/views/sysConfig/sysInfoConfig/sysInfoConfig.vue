@@ -135,9 +135,18 @@
         if(this.createDate == null){
           this.createDate = getDay();
         }else{
-          if(this.createDate.split("-").length == 3 && this.createDate.split("-")[2].length == 1){
-            this.createDate = this.createDate.split("-")[0] + "-" + this.createDate.split("-")[1] + "-0" + this.createDate.split("-")[2]
+          if(this.createDate.split("-").length == 3){
+            let mon = this.createDate.split("-")[1];
+            let day = this.createDate.split("-")[2];
+            if(this.createDate.split("-")[1].length == 1){
+              mon = "0" + this.createDate.split("-")[1];
+            }
+            if(this.createDate.split("-")[2].length == 1){
+              day = "0" + this.createDate.split("-")[2]
+            }
+            this.createDate = this.createDate.split("-")[0] + "-" + mon + "-" + day;
           }
+          console.log(this.createDate)
         }
         this.loadingTab = true;
         selectSysInfoApi({nowTab: this.currentPage, hasTab: this.pageSize, createDate: this.createDate}).then((data) => {

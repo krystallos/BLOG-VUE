@@ -64,6 +64,10 @@
             <template slot="prepend">网站</template>
           </el-input>
           <div style="margin-top: 15px;"></div>
+          <el-input placeholder="请输入账号" v-model="accessName">
+            <template slot="prepend">账号</template>
+          </el-input>
+          <div style="margin-top: 15px;"></div>
           <el-input placeholder="请输入密码" v-model="passWordInput">
             <template slot="prepend">网站密码</template>
           </el-input>
@@ -94,6 +98,7 @@
       return {
         https: '',//搜索栏
         httpsInput: '',
+        accessName: '',
         passWordInput: '',
         passWordDoubleInput: '',
         remarkInput:'',
@@ -144,16 +149,18 @@
       handleUtil(type, ids){
         if(type == 'add' || type == 'edit'){
           if(this.httpsInput == null || this.httpsInput == ''){this.$message.warning("请填写网站地址");return}
+          if(this.accessName == null || this.accessName == ''){this.$message.warning("请填写网站账号");return}
           if(this.passWordInput == null || this.passWordInput == ''){this.$message.warning("请填写密码");return}
           if(this.passWordDoubleInput == null || this.passWordDoubleInput == ''){this.$message.warning("请填写确认密码");return}
           if(this.passWordInput != this.passWordDoubleInput){this.$message.warning("两次密码不一致");return}
         }
-        updatePassWordUtilApi({ids: ids, https: this.httpsInput, passWord: this.passWordInput, remark: this.remarkInput, froms: type}).then((data) => {
+        updatePassWordUtilApi({ids: ids, https: this.httpsInput, accessName: this.accessName, passWord: this.passWordInput, remark: this.remarkInput, froms: type}).then((data) => {
           if(data.code == 200){
             this.$message.success(data.textMsg);
             this.dialogVisible = false;
             this.ids = '';
             this.httpsInput = '';
+            this.accessName = '';
             this.passWordDoubleInput = '';
             this.passWordInput = '';
             this.remarkInput = '';
@@ -179,9 +186,10 @@
       passWordUtilInfo(ids,passWord,type){
         passWordUtilInfoApi({ids: ids, passWord: passWord}).then((data) => {
           if(data.code == 200){
-            let {https , passWord, remark} = data.data;
+            let {https , passWord, remark, accessName} = data.data;
             if(type == 'edit'){
               this.httpsInput = https;
+              this.accessName = accessName;
               this.passWordInput = passWord;
               this.remarkInput = remark;
               this.dialogVisible = true;

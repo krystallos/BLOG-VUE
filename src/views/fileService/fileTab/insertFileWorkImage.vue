@@ -78,9 +78,6 @@
         }).then((data) => {
           if(data.code == 200){
             this.$message.success(data.textMsg);
-            setTimeout(() => {
-               this.$emit("update:sendDialog", false);
-            }, 500)
           }
         })
       }
