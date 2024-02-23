@@ -1,11 +1,6 @@
 <template>
   <div>
     <!-- 顶部锚点-->
-    <div
-      v-loading.fullscreen.lock="fullscreenLoading"
-      element-loading-background="rgba(231, 231, 231, 0.2)"
-      element-loading-text="拼命加载中"
-    ></div>
     <div class="topMenu" :class="isTopMenu === true ? 'disabledClass2' : 'disabledClass1'">
       <div>
         <a href="#/login" class="topcenter"><i class="el-icon-s-home"></i>加入我们</a>
@@ -64,15 +59,61 @@
             {{value[1]}}
           </el-tag>
         </div>
-        <div @click="openArticle(item.ids)" class="blosCard" v-for="(item , index) in findBlosList" :key="index">
+        <!-- 随笔 -->
+        <div style="width: 97%;margin: 0 auto">
+          <el-divider content-position="left">
+            <i class="el-icon-s-management"></i>
+            <span style="font-size: 20px;font-weight: bold;padding-left: 5px;">随笔</span>
+          </el-divider>
+        </div>
+        <el-empty :image-size="120" v-if="findNoteList.length == 0" description="暂无随笔"></el-empty>
+        <el-carousel
+          v-loading="notescreenLoading"
+          arrow="never" :autoplay="false"
+          indicator-position="none" :loop="true"
+          height="350px" style="width: 98%;"
+          ref="nop">
+          <el-carousel-item class="blosCard" v-for="(item , index) in findNoteList" :key="index">
+            <div class="imgCententNoteType">
+              <img class="blosImage2" :src="item.centImg"/>
+              <div @click="openArticle(item.ids)" class="cententNoteType">
+                <p class="cententNoteTypeP"> {{item.clobTitle}} </p>
+                <p class="cententNoteTypeG">归类于： <i class="el-icon-s-cooperation"></i> {{item.actType}}</p>
+                <p class="cententNoteTypeG">撰写时间： <i class="el-icon-s-help"></i> {{item.createDate}}</p>
+                <hr>
+                <p class="cententNoteTypeT"> {{item.liteCont}} </p>
+              </div>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+        <div class="arrowToggle">
+          <a class="prev" @click="prev"><i class="el-icon-caret-left"></i>上一篇</a>
+          <span class="messageToggle">第 {{pageItem}} 篇 / 共 {{total2}} 篇</span>
+          <a class="next" @click="next">下一篇<i class="el-icon-caret-right"></i></a>
+        </div>
+        <!-- 随笔 -->
+        <div style="height: 35px;"></div>
+        <!-- 博客 -->
+        <div style="width: 97%;margin: 0 auto;">
+          <el-divider content-position="left">
+            <i class="el-icon-s-management"></i>
+            <span style="font-size: 20px;font-weight: bold;padding-left: 5px;">文章</span>
+          </el-divider>
+        </div>
+        <el-empty :image-size="120" v-if="findBlosList.length == 0" description="暂无文章"></el-empty>
+        <div @click="openArticle(item.ids)" class="blosCard" v-for="(item , index) in findBlosList" :key="index" v-loading="fullscreenLoading">
           <div class="imgCententBlosType">
-            <img class="blosImage" :src="item.centImg"/>
+            <img class="blosImage1" :src="item.centImg"/>
             <div class="cententBlosType">
-              <p class="cententBlosTypeP"> {{item.clobTitle}} </p><hr>
+              <p class="cententBlosTypeP"> {{item.clobTitle}} </p>
+              <p class="cententBlosTypeG">归类于： <i class="el-icon-s-cooperation"></i> {{item.actType}}</p>
+              <p class="cententBlosTypeG">撰写时间： <i class="el-icon-s-help"></i> {{item.createDate}}</p>
+              <hr>
               <p class="cententBlosTypeT"> {{item.liteCont}} </p>
             </div>
           </div>
         </div>
+        <!-- 博客 -->
         <div class="bottButton">
           <el-pagination
             background
@@ -149,7 +190,7 @@
 
 <script>
 
-  import {hisBlosMainApi, hisBlosMineTypeApi } from '@/api/openApi/mineBlosMain'
+  import {hisBlosMainApi, hisBlosMineTypeApi, hisNoteMineTypeApi } from '@/api/openApi/mineBlosMain'
 
   export default {
     name: 'mineBlos',
@@ -177,9 +218,16 @@
         total: 1,
         currentPage: 1,
         pageSize: 4,
+        /* 分页2 */
+        total2: 1,
+        currentPage2: 1,
+        pageSize2: 3,
+        /* 走马灯默认tab */
+        pageItem: 1,
 
         /* 单元格*/
         findBlosList: [],
+        findNoteList: [],
         // findRightGroupTime: [],
         findRightGroupTag: [],
         findRightGroupMenu: [{
@@ -201,6 +249,7 @@
 
         /* 加载*/
         fullscreenLoading: false,
+        notescreenLoading: false,
       }
     },
     methods: {
@@ -238,6 +287,7 @@
           clobTitle: tag3,
           nowTab: this.currentPage,
           hasTab: this.pageSize,
+          onState: 1
         }).then((data) => {
           if(data.code == 200){
             this.findBlosList = [];
@@ -248,6 +298,55 @@
             this.fullscreenLoading = false;
           }, 500);
         })
+      },
+      suibiFindList(){
+        this.notescreenLoading = true;
+        hisNoteMineTypeApi({
+          psnId: this.userKey,
+          nowTab: this.currentPage2,
+          hasTab: this.pageSize2,
+          onState: 2
+        }).then((data) => {
+          if(data.code == 200){
+            this.findNoteList = data.data;
+            this.total2 = data.total;
+            setTimeout(() => {
+              this.notescreenLoading = false;
+            }, 500);
+          }
+        })
+      },
+      prev () {
+        let item = this.pageItem;
+        if(item != 1){
+          console.log(item + "是" +this.currentPage2+"和"+this.pageSize2)
+          if(item == (this.currentPage2 - 1) * this.pageSize2 + 1){
+            this.currentPage2 = this.currentPage2 - 1;
+            this.suibiFindList();
+          }else{
+            this.$refs.nop.prev();
+          }
+          this.pageItem = item - 1;
+        }else{
+          this.$message('当前已经到头啦');
+        }
+      },
+      next () {
+        let item = this.pageItem;
+        if(item == this.total2){
+          this.$message('当前已经到底，文章将从头开始加载');
+          this.pageItem = 1;
+          this.currentPage2 = 1;
+          this.suibiFindList();
+        }
+        if(item == this.currentPage2 * this.pageSize2){
+          this.currentPage2 = this.currentPage2 + 1;
+          this.suibiFindList();
+        }
+        if(item != this.total2 && item != this.currentPage2 * this.pageSize2 + 1){
+          this.pageItem = item + 1;
+          this.$refs.nop.next();
+        }
       },
       openHisMain(){
         this.$prompt('请输入用户推荐码', '访问拦截', {
@@ -381,6 +480,7 @@
       }else{
         this.hisBlosMainInfo();
         this.blosFindList();
+        this.suibiFindList();
       }
     }
   }
@@ -477,9 +577,9 @@
   .middenDiv {
     float: left;
     background-color: #ffffff;
-    width: 70%;
+    width: 65%;
     height: auto;
-    margin: 0 0 1% 5%;
+    margin: 0 0 1% 10%;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
@@ -526,7 +626,7 @@
     background: url('../../../assets/static_images/footer.png') no-repeat center;
   }
 
-  .blosImage {
+  .blosImage1 {
     object-fit: cover;
     text-align: center;
     width: 40%;
@@ -536,18 +636,70 @@
   }
 
   .imgCententBlosType {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .22), 0 0 6px rgba(0, 0, 0, .14);
     z-index: 1;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.5s;
     overflow: hidden;
-    height: 300px;
+    height: 350px;
     background-color: #fafafa;
   }
 
   .imgCententBlosType:hover {
       transform: scale(1.08);
+  }
+
+  .imgCententNoteType {
+    height: 350px;
+    background-color: #fafafa;
+  }
+
+  .blosImage2 {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  .cententNoteType {
+    background-color: rgba(0, 0, 0, .65);
+    width: 99%;
+    height: 350px;
+    padding: 15px;
+    position: absolute;
+    opacity: 0;
+    transition: 0.3s;
+    -webkit-transition: .5s;
+    -moz-transition: .5s;
+  }
+
+  .cententNoteType:hover{
+      opacity: 1;
+  }
+
+  .cententNoteTypeP {
+      color: white;
+      font-family: "幼圆";
+      padding: 15px 1% 0px;
+      font-size: 25px;
+      font-weight: 700;
+  }
+
+  .cententNoteTypeT {
+      color: white;
+      font-family: "幼圆";
+      padding: 0px 1% 5px;
+      font-size: 15px;
+      font-weight: 600;
+  }
+
+  .cententNoteTypeG {
+      color: white;
+      font-family: "幼圆";
+      padding: 0px 1% 0;
+      font-size: 14px;
+      font-weight: 600;
   }
 
   .cententBlosType {
@@ -572,6 +724,14 @@
       font-family: "幼圆";
       padding: 0px 1% 5px;
       font-size: 15px;
+      font-weight: 600;
+  }
+
+  .cententBlosTypeG {
+      color: black;
+      font-family: "幼圆";
+      padding: 0px 1% 0;
+      font-size: 14px;
       font-weight: 600;
   }
 
@@ -666,6 +826,33 @@
   @keyframes animationWidth4 {
     0%   {height:100px}
     100% {height:0}
+  }
+
+  .arrowToggle {
+    font-family: 幼圆;
+    font-weight: bold;
+    margin: 25px;
+    .prev {
+      width: 95px;
+      height: 25px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .4);
+      border-radius: 5px;
+      float: left;
+      background-size: cover;
+    }
+    .messageToggle{
+      margin-left: 37%;
+    }
+    .next {
+      width: 95px;
+      height: 25px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .4);
+      border-radius: 5px;
+      float: right;
+      background-size: cover;
+    }
   }
 
 </style>

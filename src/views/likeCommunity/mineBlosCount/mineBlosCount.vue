@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div>
-      <el-descriptions title="用户信息">
+    <el-divider content-position="left"><span style="font-size: 15px;font-weight: 600;">用户信息</span></el-divider>
+    <div style="margin: 15px;">
+      <el-descriptions>
           <el-descriptions-item label="用户名">{{psnName}}</el-descriptions-item>
           <el-descriptions-item label="手机号">{{psnPhone}}</el-descriptions-item>
           <el-descriptions-item label="邮箱">{{email}}</el-descriptions-item>
@@ -10,21 +11,22 @@
       </el-descriptions>
     </div>
     <div style="margin-top: 15px;"></div>
-    <div>
+    <el-divider content-position="left"><span style="font-size: 15px;font-weight: 600;">归档</span></el-divider>
+    <div style="box-shadow: 0 3px 5px 3px rgba(110,110,110,.1);">
       <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="最近(2天内的数据)" name="1" ><mineBlosCountTab :sysType="sysType" v-if="isTab == '1'" /></el-tab-pane>
-        <!-- <el-tab-pane label="文章" name="2"><mineBlosCountTab :sysType="sysType" v-if="isTab == '2'" /></el-tab-pane> -->
-        <el-tab-pane label="资源(近100条)" name="3"><mineBlosCountTab :sysType="sysType" v-if="isTab == '3'" /></el-tab-pane>
+        <el-tab-pane label="最近" name="1" ><mineBlosCountTab :sysType="sysType" v-if="isTab == '1'" /></el-tab-pane>
+        <el-tab-pane label="资源" name="3"><mineBlosCountTab :sysType="sysType" v-if="isTab == '3'" /></el-tab-pane>
         <el-tab-pane label="收藏" name="4"><mineBlosCountTab :sysType="sysType" v-if="isTab == '4'" /></el-tab-pane>
       </el-tabs>
     </div>
     <div style="margin-top: 15px;"></div>
-    <div>
+    <el-divider content-position="left"><span style="font-size: 15px;font-weight: 600;">文章管理</span></el-divider>
+    <div style="box-shadow: 0 3px 5px 3px rgba(110,110,110,.3);">
       <!-- 表格 -->
       <el-table
         v-loading="loadingTab"
         :data="mineBlosTab"
-        style="width: 100%">
+        style="width: 100%;padding: 5px;">
         <el-table-column prop="clobTitle" label="文章名称"></el-table-column>
         <el-table-column prop="actName" label="分类" width="150px"></el-table-column>
         <el-table-column prop="psnName" label="用户" width="70px"></el-table-column>

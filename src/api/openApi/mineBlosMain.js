@@ -44,3 +44,12 @@ export function getTimeGroupByApi(data) {
     data
   })
 }
+
+// 获取随笔
+export function hisNoteMineTypeApi(data) {
+  return request({
+    url: '/open/hisNoteMineType.act',
+    method: 'post',
+    data
+  })
+}

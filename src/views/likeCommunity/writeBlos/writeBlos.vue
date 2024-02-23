@@ -44,17 +44,26 @@
     </div>
     <div class="bottomDiv">
       <div style="float: right;">
+        <div style="margin:20px 0 0 0;">
+          <span> 是否随笔 </span>
+          <el-radio-group v-model="state">
+            <el-radio :label="1">博客</el-radio>
+            <el-radio :label="2">随笔</el-radio>
+          </el-radio-group>
+        </div>
+        <div style="margin:20px 0 0 0;">
         <span> 所属分类 </span>
-        <el-select v-model="selectValue" placeholder="归类">
-          <el-option
-            v-for="item in selectOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+          <el-select v-model="selectValue" placeholder="归类">
+            <el-option
+              v-for="item in selectOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
       </div>
-      <div style="float: left;">
+      <div style="float: left;margin:15px 0 0 0;">
         <el-button type="primary" plain @click="writeBlos">提交文章</el-button>
       </div>
     </div>
@@ -74,6 +83,7 @@
       return {
         blosTitle: '',
         selectValue: '',
+        state: 1,
         centImg: '',
         selectOptions: [],
         fileList: [],
@@ -104,7 +114,6 @@
               maxFileSize: 50 * 1024 * 1024, //1g //设置大点 不然图片过大会报错
               // 上传完成回调
               customInsert(res, insertFn){
-                console.log(res);
                 insertFn(res.textMsg, "alt", res.textMsg)
               },
               // 上传错误，或者触发 timeout 超时
@@ -157,7 +166,7 @@
           content: this.html,
           liteCont: simlContent,
           actType: this.selectValue,
-          state: 1,
+          state: this.state,
           centImg: this.centImg
         }).then((data) => {
           if(data.code == 200){

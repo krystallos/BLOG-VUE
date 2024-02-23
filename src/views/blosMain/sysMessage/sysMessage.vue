@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- 系统信息 -->
+    <el-divider content-position="left"><span style="font-size: 15px;font-weight: 600;">数据统计</span></el-divider>
     <div style="width: 100%;">
       <el-card shadow="hover" class="box-card1">
         <div slot="header" class="clearfix">
@@ -40,6 +41,7 @@
       <div style="padding-top: 1px;"></div>
     </div>
     <div style="margin-top: 15px;"></div>
+    <el-divider content-position="left"><span style="font-size: 15px;font-weight: 600;">问题反馈</span></el-divider>
     <div>
       <!-- 顶部按钮 -->
       <el-button type="primary" plain @click="issBug">提交BUG</el-button>
