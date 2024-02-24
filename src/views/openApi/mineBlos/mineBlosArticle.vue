@@ -302,7 +302,6 @@
     font-weight: 400;
     font-family: "幼圆";
     color: white;
-    -webkit-text-stroke:0.3px #1d1d1d;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
   }
 

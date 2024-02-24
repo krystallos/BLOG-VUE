@@ -38,6 +38,7 @@
     </div>
     <div class="middenMain">
       <div class="middenDiv">
+        <!-- 版本更新 -->
         <div class="divCard">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -49,6 +50,8 @@
             </div>
           </el-card>
         </div>
+        <!-- 版本更新 -->
+        <!-- 搜索标签 -->
         <div class="divTagCard">
           <el-tag
             style="margin-left: 10px;"
@@ -59,6 +62,7 @@
             {{value[1]}}
           </el-tag>
         </div>
+        <!-- 搜索标签 -->
         <!-- 随笔 -->
         <div style="width: 97%;margin: 0 auto">
           <el-divider content-position="left">
@@ -68,6 +72,7 @@
         </div>
         <el-empty :image-size="120" v-if="findNoteList.length == 0" description="暂无随笔"></el-empty>
         <el-carousel
+          v-if="findNoteList.length != 0"
           v-loading="notescreenLoading"
           arrow="never" :autoplay="false"
           indicator-position="none" :loop="true"
@@ -101,7 +106,9 @@
           </el-divider>
         </div>
         <el-empty :image-size="120" v-if="findBlosList.length == 0" description="暂无文章"></el-empty>
-        <div @click="openArticle(item.ids)" class="blosCard" v-for="(item , index) in findBlosList" :key="index" v-loading="fullscreenLoading">
+        <div @click="openArticle(item.ids)" v-if="findBlosList.length != 0"
+          class="blosCard" v-for="(item , index) in findBlosList"
+          :key="index" v-loading="fullscreenLoading">
           <div class="imgCententBlosType">
             <img class="blosImage1" :src="item.centImg"/>
             <div class="cententBlosType">
@@ -128,6 +135,7 @@
           </el-pagination>
         </div>
       </div>
+      <!-- 右侧标签 -->
       <div class="rightDiv">
         <el-input placeholder="请输入内容" v-model="clobTitle">
           <el-button @click="addRightTag('tag3', clobTitle, clobTitle.slice(0,3) + '...')" slot="append" icon="el-icon-search"></el-button>
@@ -166,6 +174,7 @@
           </ul>
         </div>
       </div>
+      <!-- 右侧标签 -->
     </div>
     <div>
       <footer class="footer">
@@ -300,9 +309,16 @@
         })
       },
       suibiFindList(){
+        let tag1 = this.tagMap.get('tag1') != null ? this.tagMap.get('tag1'): 'All';
+        let tag2 = this.tagMap.get('tag2') != null ? this.tagMap.get('tag2'): null;
+        let tag3 = this.tagMap.get('tag3') != null ? this.tagMap.get('tag3'): null;
+
         this.notescreenLoading = true;
         hisNoteMineTypeApi({
           psnId: this.userKey,
+          createDate: tag1,
+          actType: tag2,
+          clobTitle: tag3,
           nowTab: this.currentPage2,
           hasTab: this.pageSize2,
           onState: 2
@@ -319,7 +335,6 @@
       prev () {
         let item = this.pageItem;
         if(item != 1){
-          console.log(item + "是" +this.currentPage2+"和"+this.pageSize2)
           if(item == (this.currentPage2 - 1) * this.pageSize2 + 1){
             this.currentPage2 = this.currentPage2 - 1;
             this.suibiFindList();
@@ -333,6 +348,10 @@
       },
       next () {
         let item = this.pageItem;
+        if(item > this.total2){
+          this.$message('当前暂无文章');
+          return;
+        }
         if(item == this.total2){
           this.$message('当前已经到底，文章将从头开始加载');
           this.pageItem = 1;
@@ -346,6 +365,7 @@
         if(item != this.total2 && item != this.currentPage2 * this.pageSize2 + 1){
           this.pageItem = item + 1;
           this.$refs.nop.next();
+          return;
         }
       },
       openHisMain(){
@@ -355,6 +375,7 @@
           this.userKey = value;
           this.hisBlosMainInfo();
           this.blosFindList();
+          this.suibiFindList();
         });
       },
       lookVer(){
@@ -433,9 +454,11 @@
         }
       },
       addRightTag(value, value1, value2){
+        this.pageItem = 1;
         this.tags.set(value, value2);
         this.tagMap.set(value, value1)
         this.blosFindList();
+        this.suibiFindList();
       },
       handleCloseTag(tag) {
         this.tags.delete(tag[0]);
@@ -445,6 +468,7 @@
           this.clobTitle = ''
         }
         this.blosFindList();
+        this.suibiFindList();
       },
       openArticle(value){
         const routeData = this.$router.resolve({
