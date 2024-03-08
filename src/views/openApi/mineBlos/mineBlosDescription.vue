@@ -4,10 +4,11 @@
       <div>
         <a href="#/login" class="topcenter"><i class="el-icon-s-home"></i>加入我们</a>
         <a :href="'#/mineBlos?ids=' + userKey" class="topcenter"><i class="el-icon-s-management"></i>回到主站</a>
+        <a :href="'#/mineBlosDrama?ids=' + userKey" class="topcenter"><i class="el-icon-video-camera-solid"></i>我的追番</a>
         <a :href="'#/mineBlosDescription?ids=' + userKey" class="topcenter"><i class="el-icon-s-custom"></i>关于网站</a>
         <a href="#/setu" class="topcenter"><i class="el-icon-s-marketing"></i>图床</a>
         <a href="#/fictionMain" class="topcenter"><i class="el-icon-s-management"></i>小说库</a>
-        <a href="#/selectImage" class="topcenter"><i class="el-icon-video-camera-solid"></i>图形图像</a>
+        <a href="#/selectImage" class="topcenter"><i class="el-icon-camera-solid"></i>图形图像</a>
       </div>
     </div>
     <div class="topImageDiv">

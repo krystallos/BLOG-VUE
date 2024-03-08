@@ -16,6 +16,7 @@
       <div>
         <a href="#/login" class="topcenter"><i class="el-icon-s-home"></i>加入我们</a>
         <a :href="'#/mineBlos?ids=' + userKey" class="topcenter"><i class="el-icon-s-management"></i>回到主站</a>
+        <a :href="'#/mineBlosDrama?ids=' + userKey" class="topcenter"><i class="el-icon-video-camera-solid"></i>我的追番</a>
         <a :href="'#/mineBlosDescription?ids=' + userKey" class="topcenter"><i class="el-icon-s-custom"></i>关于网站</a>
       </div>
     </div>

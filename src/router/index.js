@@ -97,6 +97,13 @@ export const constantRoutes = [
     component: () => import('@/views/openApi/mineBlos/mineBlosDescription.vue'),
     name: '博客介绍'
   },
+  //我的追番
+  {
+    path: '/mineBlosDrama',
+    alwaysShow: true,
+    component: () => import('@/views/openApi/mineBlos/mineBlosDrama.vue'),
+    name: '我的追番'
+  },
   //小说主页
   {
     path: '/fictionMain',
