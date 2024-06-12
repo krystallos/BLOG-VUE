@@ -45,6 +45,15 @@ export function getTimeGroupByApi(data) {
   })
 }
 
+// 获取时间轴集合
+export function getTimeGroupOrderByApi(data) {
+  return request({
+    url: '/open/getTimeGroupOrder.act',
+    method: 'post',
+    data
+  })
+}
+
 // 获取随笔
 export function hisNoteMineTypeApi(data) {
   return request({

@@ -45,10 +45,23 @@
                 :defaultConfig="editorConfig"
                 :mode="mode"
                 @onCreated="onCreated"
+                @onChange="onChange"
             />
         </div>
       </div>
       <!-- 富文本内容 -->
+    </div>
+    <div class="my-menus" :class="isTopMenu === true ? 'disabledClass2' : 'disabledClass1'">
+      <div class="textML">
+        <i class="el-icon-s-unfold"></i>
+        <span>目录</span>
+        <el-divider></el-divider>
+      </div>
+      <div v-for="(item,index) in menuList" :key="item.id" v-text="item.value"
+        style="cursor: pointer;"
+       :class="`${item.type}`"
+       @click="gotoView(item.id)"
+      ></div>
     </div>
     <!-- 结尾 -->
     <div class="bottomDiv">
@@ -98,12 +111,39 @@
         mode: 'default',
         /* 富文本*/
         isTopMenu: false,
+        /* 目录 */
+        menuList: [],
       }
     },
     methods: {
+      gotoView(id){
+        let section = document.getElementById(id);
+        if (section) {
+          section.scrollIntoView({
+            behavior: "smooth",
+            block:    "start"
+          })
+        }
+      },
       onCreated(editor) {
         this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
         editor.disable();
+      },
+      onChange(editor) {
+          // 生成目录数据
+          this.navGenerate(editor);
+      },
+      // header数据
+      navGenerate(editor) {
+        this.menuList = []
+        const headers = editor.getElemsByTypePrefix('header')
+        headers.map((header) => {
+          this.menuList.push({
+             id: header.id,
+             type: header.type,
+             value: header.children.map((v) => v.text).join('')
+          })
+        })
       },
       urlHanlden(){
         let geturl = window.location.href;
@@ -132,11 +172,11 @@
         })
       },
       hisBlosTypeTab(){
-        hisBlosTypeApi({}).then((data) => {
-          if(data.code == 200){
+        // hisBlosTypeApi({}).then((data) => {
+        //   if(data.code == 200){
 
-          }
-        })
+        //   }
+        // })
       },
       leftButtomTom(value){
         if(value == 'linkShare'){
@@ -214,6 +254,7 @@
   }
 
   .disabledClass1 {
+    pointer-events: none;
     transition: translateY(-100%);
     opacity: 0;
   }
@@ -304,6 +345,57 @@
     font-family: "幼圆";
     color: white;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .my-menus {
+    transition:all 0.3s;
+    z-index: 6;
+    position: fixed;
+    width: 15%;
+    top: 90px;
+    right: 15px;
+    border-radius: 5%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  }
+
+  .textML {
+    margin: 15px;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: "宋体";
+  }
+
+  .header1 {
+    margin: 10px 10px 10px 15px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "宋体";
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .header2 {
+    margin: 10px 10px 10px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "宋体";
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .header3 {
+    margin: 10px 10px 10px 45px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: "宋体";
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .cententDiv {

@@ -81,6 +81,7 @@
     components: { Editor, Toolbar },
     data () {
       return {
+        keyTime: '',
         blosTitle: '',
         selectValue: '',
         state: 1,
@@ -129,6 +130,29 @@
     methods: {
       onCreated(editor) {
         this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+
+        if(localStorage.getItem("blosItem")!==null){
+          this.$confirm('发现上次未保存的文章，是否恢复?', '文章恢复', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            editor.setHtml(localStorage.getItem("blosItem"));
+          }).catch(() => {
+            localStorage.removeItem("blosItem");
+          });
+        }
+        let msg = this.$notify;
+        this.keyTime = setInterval(function (){
+          if(editor.getText().length!==0){
+              localStorage.removeItem("blosItem");
+              localStorage.setItem("blosItem",editor.getHtml());
+              msg.info({
+                title: '文章自动保存',
+                message: '已在'+ new Date().toLocaleTimeString() +'自动保存了一次'
+              });
+          }
+        },120000);
       },
       handleRemove() {
         this.centImg = null;
@@ -137,7 +161,6 @@
       },
       handleSuccess(res) {
         this.centImg = res.textMsg.replace('blosBoot/imgBlos/','');
-        console.log(this.centImg)
         this.$message.success(res.reslutMsg);
       },
       goBlosTag(){
@@ -184,7 +207,8 @@
     beforeDestroy() {
       const editor = this.editor
       if (editor == null) return
-      editor.destroy() // 组件销毁时，及时销毁编辑器
+      editor.destroy(); // 组件销毁时，及时销毁编辑器
+      clearInterval(this.keyTime);
     }
   }
 

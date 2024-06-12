@@ -59,7 +59,7 @@
       <!-- 富文本内容 -->
       <div style="margin-top: 10px;">
         <el-row :gutter="24" style="margin-bottom: 10px;">
-          <el-col :span="24">
+          <el-col :span="20">
             <span style='font-size: 20px;font-weight: 600;'>头部参数 (Params/Header)</span>
             <Editor
                 style="height: 100px; overflow-y: hidden;border: 1px solid #e5e5e5;"
@@ -68,6 +68,16 @@
                 :mode="mode"
                 @onCreated="onCreated"
             />
+          </el-col>
+          <el-col :span="4">
+            <span style='font-size: 20px;font-weight: 600;'>功能视图概况</span>
+            <div>
+              <el-image
+              style="width: 100px; height: 100px"
+              :src="picUrl"
+              :preview-src-list="[picUrl]"
+              fit="fit"></el-image>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -127,6 +137,10 @@
         dataType:'',
         createName:'',
         updateDate:'',
+        picUrl: '',
+        picUrlList: null,
+        dialogVisible: false,
+        disabled:false,
         editorConfig: {
           placeholder: '请输入内容...',
         },
@@ -151,6 +165,8 @@
             this.dataType = data.data.dataType;
             this.createName = data.data.createName;
             this.updateDate = data.data.updateDate;
+            this.picUrl = data.data.picUrl;
+            this.picUrlList = [{'url': data.data.picUrl}];
             this.loadingTab = false;
           }, 500)
         })

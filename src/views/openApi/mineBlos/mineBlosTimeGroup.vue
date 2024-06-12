@@ -25,6 +25,16 @@
       <el-divider direction="vertical"></el-divider>
       <span class="text2">Archives</span>
     </div>
+    <el-tabs tab-position="left" class="groupOrderTime">
+      <el-tab-pane
+        :label="item.dicName"
+        :key="index"
+        :name="item.dicName"
+        v-for="(item,index) in findListGroupOrder"
+      >
+        <div style="font-weight: 600;font-size: 15px;" slot="label" @click="getTimeGroupBy(item.dicValue)">{{item.dicName}}</div>
+      </el-tab-pane>
+    </el-tabs>
     <div class="groupTime">
       <el-timeline>
         <el-timeline-item
@@ -48,7 +58,7 @@
 
 <script>
 
-  import { getTimeGroupByApi } from '@/api/openApi/mineBlosMain'
+  import { getTimeGroupByApi, getTimeGroupOrderByApi } from '@/api/openApi/mineBlosMain'
 
   export default {
     name: 'mineBlosTimeGroup',
@@ -59,13 +69,28 @@
         isTopMenu: true,
         userKey: null,
         findListGroup: [],
+        findListGroupOrder: [],
         /* 加载*/
         fullscreenLoading: false,
       }
     },
     methods: {
-      getTimeGroupBy(){
-        getTimeGroupByApi({psnId: this.userKey}).then((data) => {
+      getTimeGroupOrderBy(){
+        getTimeGroupOrderByApi({psnId: this.userKey}).then((data) => {
+          if(data.code == 200){
+            this.findListGroupOrder = data.data
+            if(data.data.length > 0){
+              this.getTimeGroupBy(data.data[0].dicValue)
+            }
+          }
+          setTimeout(() => {
+            this.fullscreenLoading = false;
+          }, 500);
+        })
+      },
+      getTimeGroupBy(event){
+        console.log(event)
+        getTimeGroupByApi({psnId: this.userKey, createDate: event}).then((data) => {
           if(data.code == 200){
             this.findListGroup = data.data
           }
@@ -102,7 +127,7 @@
     created(){
       this.fullscreenLoading = true;
       this.urlHanlden();
-      this.getTimeGroupBy();
+      this.getTimeGroupOrderBy();
     }
   }
 </script>
@@ -169,11 +194,17 @@
     color: #888;
   }
 
-  .groupTime {
-    margin: 0 auto;
-    width: 40%;
-    margin-top: 35px;
+  .groupOrderTime {
+    margin: 35px 0 0 20%;
     align-items: center;
+    float: left;
+  }
+
+  .groupTime {
+    width: 40%;
+    margin: 35px 0 0 20px;
+    align-items: center;
+    float: left;
   }
 
 </style>

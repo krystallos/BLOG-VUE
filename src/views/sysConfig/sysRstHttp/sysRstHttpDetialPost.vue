@@ -59,7 +59,7 @@
       <!-- 富文本内容 -->
       <div style="margin-top: 10px;">
         <el-row :gutter="24" style="margin-bottom: 10px;">
-          <el-col :span="24">
+          <el-col :span="18">
             <span style='font-size: 20px;font-weight: 600;'>头部参数 (Params/Header)</span>
             <Editor
                 style="height: 100px; overflow-y: hidden;border: 1px solid #e5e5e5;"
@@ -68,6 +68,52 @@
                 :mode="mode"
                 @onCreated="onCreated"
             />
+          </el-col>
+          <el-col :span="6">
+            <span style='font-size: 20px;font-weight: 600;'>功能视图概况</span>
+            <div v-if="disType == 2 || disType == 3">
+              <el-upload
+                ref="upload"
+                action="/blosBoot/open/tempFileUpLoadCode.act"
+                list-type="picture-card"
+                accept=".jpg, .jpeg, .png"
+                :on-success="handleSuccess"
+                :file-list="picUrlList != null ? picUrlList : null"
+                :limit="1"
+                :multiple="false"
+                :auto-upload="true"
+              >
+              <i slot="default" class="el-icon-plus"></i>
+                  <div slot="file" slot-scope="{file}">
+                    <img
+                      class="el-upload-list__item-thumbnail"
+                      :src="file.url" alt=""
+                    >
+                    <span class="el-upload-list__item-actions">
+                      <span
+                        class="el-upload-list__item-preview"
+                        @click="handlePictureCardPreview(file)"
+                      >
+                        <i class="el-icon-zoom-in"></i>
+                      </span>
+                      <span
+                        v-if="!disabled"
+                        class="el-upload-list__item-delete"
+                        @click="handleRemove(file)"
+                      >
+                        <i class="el-icon-delete"></i>
+                      </span>
+                    </span>
+                  </div>
+              </el-upload>
+            </div>
+            <div v-if="disType == 1">
+              <el-image
+              style="width: 100px; height: 100px"
+              :src="picUrl"
+              :preview-src-list="[picUrl]"
+              fit="fit"></el-image>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -101,6 +147,18 @@
     <div style="float: right;" v-if="disType == 2 || disType == 3">
       <el-button type="primary" icon="el-icon-edit" @click="savePost()"> 保存 </el-button>
     </div>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :modal="false"
+      :destroy-on-close="true"
+      width="500px"
+    >
+      <el-image
+        style="align-items: center;"
+        :src="picUrl"
+        fit="cover"
+      ></el-image>
+    </el-dialog>
   </div>
 </template>
 
@@ -130,6 +188,10 @@
         dataType:'',
         createName:'',
         updateDate:'',
+        picUrl: '',
+        picUrlList: null,
+        dialogVisible: false,
+        disabled:false,
         editorConfig: {
           placeholder: '请输入内容...',
         },
@@ -140,6 +202,23 @@
       }
     },
     methods: {
+      handleSuccess(response){
+        if(response.code == 200){
+          this.$notify({
+            title: '文件上传通知',
+            message: response.reslutMsg
+          });
+          this.picUrl = '/blosBoot/tempFile/' + response.textMsg;
+        }
+      },
+      handleRemove(file) {
+        let fileList = this.$refs.upload.uploadFiles;
+        fileList.splice(null, 1);
+        this.picUrl = "";
+      },
+      handlePictureCardPreview(file) {
+        this.dialogVisible = true;
+      },
       //详情接口集成
       getRstApiDetial(){
         this.loadingTab = true;
@@ -154,6 +233,8 @@
             this.dataType = data.data.dataType;
             this.createName = data.data.createName;
             this.updateDate = data.data.updateDate;
+            this.picUrl = data.data.picUrl;
+            this.picUrlList = [{'url': data.data.picUrl}];
             this.loadingTab = false;
           }, 500)
         })
@@ -169,7 +250,8 @@
           params: this.params,
           inpBody: this.inpBody,
           outBody: this.outBody,
-          dataType: this.dataType
+          dataType: this.dataType,
+          picUrl: this.picUrl
         }).then((data) => {
           setTimeout(() => {
             if(data.code == 200){

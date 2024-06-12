@@ -188,7 +188,6 @@
         this.dialogVisible = true;
       },
       submitUpload() {
-        console.log(this.$refs.upload.uploadFiles.length)
         if(this.$refs.upload.uploadFiles.length == 0){
           this.$message.warning("请上传一张图片");
           return;
