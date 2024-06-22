@@ -1,17 +1,17 @@
 <template>
   <div style="min-width: 1800px;">
     <div class="topDiv">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+      <el-menu default-active="2" class="el-menu-demo" mode="horizontal">
         <el-menu-item index="1">
           <img src="@/assets/static_images/wdnm.png" class="topImageDiv">
         </el-menu-item>
         <el-menu-item index="2" @click="talkVisible = true">功能介绍</el-menu-item>
         <el-menu-item index="3" @click="thylemVisible = true">使用引擎</el-menu-item>
-        <el-menu-item index="4"><a href="/#/login">回到主站</a></el-menu-item>
-        <el-menu-item index="5"><a href="/#/404">AI词库</a></el-menu-item>
-        <el-menu-item index="6"><a href="/#/setu">爬虫图床</a></el-menu-item>
-        <el-menu-item index="7"><a href="/#/fictionMain">小说站</a></el-menu-item>
-        <el-menu-item index="8"><a href="/#/openApiDoc">接口文档工具</a></el-menu-item>
+        <el-menu-item index="4"><router-link to="/login">回到主站</router-link></el-menu-item>
+        <el-menu-item index="5"><router-link to="/404">AI词库</router-link></el-menu-item>
+        <el-menu-item index="6"><router-link to="/setu">爬虫图床</router-link></el-menu-item>
+        <el-menu-item index="7"><router-link to="/fictionMain">小说站</router-link></el-menu-item>
+        <el-menu-item index="8"><router-link to="/openApiDoc">接口文档工具</router-link></el-menu-item>
       </el-menu>
     </div>
     <div class="cententText">
@@ -99,9 +99,12 @@
           <div class="dialogLeftText">图片相似度：<span class="dialogLeftMsg">{{likeImg}}</span></div>
           <div class="dialogLeftText">{{orderTime}}</div>
           <el-divider content-position="left"><span style="font-weight: 600;">图床收录</span></el-divider>
-          <div class="dialogLeftText">{{blosImgUrl}}</div>
-          <div class="dialogLeftText">{{blosPic}}</div>
-          <div class="dialogLeftText">{{blosPicUrl}}</div>
+          <div class="dialogLeftText">站内地址：</div>
+          <div class="dialogLeftText"><span class="dialogLeftMsg">{{blosImgUrl}}</span></div>
+          <div class="dialogLeftText">站内名称：</div>
+          <div class="dialogLeftText"><span class="dialogLeftMsg">{{blosPic}}</span></div>
+          <div class="dialogLeftText">站内图片路径：</div>
+          <div class="dialogLeftText"><span class="dialogLeftMsg">{{blosPicUrl}}</span></div>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="closeImageDialog">我知道了</el-button>

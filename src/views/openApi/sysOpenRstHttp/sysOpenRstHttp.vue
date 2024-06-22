@@ -1,16 +1,26 @@
 <template>
   <div>
-    <div class="topDiv">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+    <div>
+      <el-menu default-active="2" mode="horizontal">
         <el-menu-item index="1">
           <img src="@/assets/static_images/wdnm.png" class="topImageDiv">
         </el-menu-item>
         <el-menu-item index="2" @click="talkVisible = true">功能介绍</el-menu-item>
-        <el-menu-item index="3"><a href="/#/login">回到主站</a></el-menu-item>
-        <el-menu-item index="4"><a href="/#/404">AI词库</a></el-menu-item>
-        <el-menu-item index="5"><a href="/#/setu">爬虫图床</a></el-menu-item>
-        <el-menu-item index="6"><a href="/#/fictionMain">小说站</a></el-menu-item>
-        <el-menu-item index="7"><a href="/#/selectImage">识图工具</a></el-menu-item>
+        <el-menu-item index="3" >
+          <router-link to="/login">回到主站</router-link>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <router-link to="/404">AI词库</router-link>
+        </el-menu-item>
+        <el-menu-item index="5">
+          <router-link to="/setu">爬虫图床</router-link>
+        </el-menu-item>
+        <el-menu-item index="6">
+          <router-link to="/fictionMain">小说站</router-link>
+        </el-menu-item>
+        <el-menu-item index="7">
+          <router-link to="/selectImage">识图工具</router-link>
+        </el-menu-item>
       </el-menu>
     </div>
     <div style="padding: 40px;">
@@ -52,7 +62,7 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="300">
+            width="200">
             <template slot-scope="scope">
               <el-button v-if="scope.row.isFile == '1'" @click="handleDetial(scope.row.ids)" type="primary" size="small" plain>查看</el-button>
             </template>
@@ -116,6 +126,7 @@
 <script>
 
   import { rstOpenPostList } from '@/api/openApi/sysOpenRstHttpApi'
+  import { selectSessionSysVersionsApi } from '@/api/sysVersions.js'
   import sysOpenRstHttpDetial from './sysOpenRstHttpDetial.vue'
 
   export default {
@@ -136,11 +147,27 @@
         projectId: '',
         childProjectId: '',
 
-        talkVisible: false,
-        activeIndex: '1',
+        talkVisible: false
       }
     },
     methods: {
+      selectSessionSysVersions(){
+        let nowTime = new Date().getTime();
+        if(localStorage.getItem("httpApiVersion") == null || localStorage.getItem("httpApiVersion") < nowTime) {
+          let date = new Date();
+          let day = date.getDate();
+          date.setDate(day + 5);
+          localStorage.setItem("httpApiVersion", date.getTime())
+          selectSessionSysVersionsApi({}).then((data) => {
+            if(data.data != null){
+              this.$alert(data.data.verType, data.data.verName, {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: '我已了解'
+              });
+            }
+          })
+        }
+      },
       //查询重置集成
       selectFor(){
         this.pageSize = 10;
@@ -186,6 +213,7 @@
     },
     created() {
       this.urlHanlden();
+      this.selectSessionSysVersions();
       this.rstPostListApi();
     }
   }
@@ -194,10 +222,6 @@
 
 
 <style scoped>
-
-  .topDiv {
-
-  }
 
   .topImageDiv {
     width: 40px;

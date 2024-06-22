@@ -3,7 +3,7 @@
     <div class="topBreadcrumb">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/fictionMain' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+        <el-breadcrumb-item>小说详情【{{chineseName}}】</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="centernDiv">
@@ -11,7 +11,7 @@
         [EPUB]《{{chineseName}}》[共 {{bookSize}} 卷]
       </div>
       <div class="createDateDiv">
-        Posted {{createDate}}
+        Posted: {{createDate}}
       </div>
       <div class="tagDiv">
         <el-tag v-for="tagItem in tagVo" style="margin: 3px;" size="medium">{{tagItem.dicName}}</el-tag>
@@ -78,6 +78,7 @@
         </el-table>
       </div>
     </div>
+    <div style="height: 30px;"></div>
   </div>
 </template>
 
@@ -159,7 +160,7 @@
       },
       downloadFiction(value){
         this.$notify({
-          title: '功能性提示',
+          title: '提示',
           message: '目前小说下载暂未开放，后续功能完成另行通知',
           type: 'warning'
         });
@@ -200,6 +201,7 @@
   .createDateDiv {
     padding: 15px 35px 5px 35px;
     font-size: 15px;
+    font-weight: 400;
     color: #3c5b68;
   }
 

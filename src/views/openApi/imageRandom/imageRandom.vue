@@ -4,21 +4,22 @@
     <div v-show="showLook" style="background: rgba(243, 243, 243, 0.95);width: 100%;height: 100%;position: fixed;z-index: 200;left: 0;right: 0;" >
       <div style="text-align: center;margin-top: 10%;">
         <i class="el-icon-warning" style="font-size: 150px;"></i>
-        <h2>此页面可能包含部分不宜在公众场合查看内容，如已知晓可点击[<span style="color: red;">我知道了</span>]继续浏览</h2>
+        <h2>此页面不宜在公众场合查看，并将会<span style="color: red;">监控您的网络地址</span>，
+        如接受协议可点击[<span style="color: red;">我知道了</span>]继续浏览</h2>
         <el-button @click="showLook = false" type="warning">我知道了</el-button>
       </div>
     </div>
 
     <div class="topMenuDiv">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+      <el-menu default-active="2" mode="horizontal">
         <el-menu-item index="1">
           <img src="@/assets/static_images/wdnm.png" class="topImageDiv">
         </el-menu-item>
-        <el-menu-item index="2"><a href="/#/login">回到主站</a></el-menu-item>
-        <el-menu-item index="3"><a href="/#/404">AI词库</a></el-menu-item>
-        <el-menu-item index="4"><a href="/#/selectImage">识图工具</a></el-menu-item>
-        <el-menu-item index="5"><a href="/#/fictionMain">小说站</a></el-menu-item>
-        <el-menu-item index="6"><a href="/#/openApiDoc">接口文档工具</a></el-menu-item>
+        <el-menu-item index="2"><router-link to="/login">回到主站</router-link></el-menu-item>
+        <el-menu-item index="3"><router-link to="/404">AI词库</router-link></el-menu-item>
+        <el-menu-item index="4"><router-link to="/selectImage">识图工具</router-link></el-menu-item>
+        <el-menu-item index="5"><router-link to="/fictionMain">小说站</router-link></el-menu-item>
+        <el-menu-item index="6"><router-link to="/openApiDoc">接口文档工具</router-link></el-menu-item>
       </el-menu>
     </div>
     <div class="topDiv">
@@ -125,9 +126,7 @@
         ids: '',
         dialogVisible: false,
         tagName: '',
-        showLook: true,
-
-        activeIndex: '1',
+        showLook: true
       }
     },
     methods: {

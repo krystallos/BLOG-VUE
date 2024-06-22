@@ -7,13 +7,13 @@
       element-loading-text="拼命加载中"
     ></div>
     <div>
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+      <el-menu default-active="2" class="el-menu-demo" mode="horizontal">
         <el-menu-item index="0" disabled>
           <img src="@/assets/static_images/wdnm.png" class="topImageDiv">
         </el-menu-item>
-        <el-menu-item index="1"><a href="/#/setu">爬虫图床</a></el-menu-item>
-        <el-menu-item index="2"><a href="/#/fictionMain">小说站</a></el-menu-item>
-        <el-menu-item index="3"><a href="/#/selectImage">图像处理</a></el-menu-item>
+        <el-menu-item index="1"><router-link to="/setu">爬虫图床</router-link></el-menu-item>
+        <el-menu-item index="2"><router-link to="/fictionMain">小说站</router-link></el-menu-item>
+        <el-menu-item index="3"><router-link to="/selectImage">图像处理</router-link></el-menu-item>
       </el-menu>
     </div>
     <el-empty v-if="imageList.length == 0" :image-size="200"></el-empty>
@@ -43,7 +43,6 @@
     name: 'imageShare',
     data() {
       return {
-        activeIndex: '',
         imageList: [],
         srcImage: [],
         userKey: null,

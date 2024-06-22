@@ -30,6 +30,9 @@
         <el-col :span="4">
           <el-input v-model="postName" placeholder="接口名称"></el-input>
         </el-col>
+        <el-col :span="4">
+          <el-input v-model="postUrl" placeholder="接口路径"></el-input>
+        </el-col>
         <el-col :span="2">
           <el-button type="primary" @click="selectFor">搜索</el-button>
         </el-col>
@@ -110,6 +113,7 @@
         postIds: '',
         loadingTab: false,//加载
         postName: '',
+        postUrl: '',
         dialogPostVisible: false,
 
         projectName: '',
@@ -150,7 +154,13 @@
       },
       getRstPostListApi(){
         this.loadingTab = true;
-        getRstPostListApi({ids: this.projectIds, postName: this.postName, nowTab: this.currentPage, hasTab: this.pageSize}).then((data) => {
+        getRstPostListApi({
+          ids: this.projectIds, 
+          postName: this.postName, 
+          postUrl: this.postUrl, 
+          nowTab: this.currentPage, 
+          hasTab: this.pageSize,
+        }).then((data) => {
           setTimeout(() => {
             this.rstProjectList = data.data;
             this.total = data.total;

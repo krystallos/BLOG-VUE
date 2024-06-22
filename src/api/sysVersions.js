@@ -45,6 +45,15 @@ export function selectOneAndOneSysVersionsApi(data) {
   })
 }
 
+// 使用session获取公告
+export function selectSessionSysVersionsApi(data) {
+  return request({
+    url: '/open/selectSessionSysVersions.act',
+    method: 'post',
+    data
+  })
+}
+
 // 确认通告
 export function sysVersionsWebIssApi(data) {
   return request({

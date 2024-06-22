@@ -1,7 +1,7 @@
 <template>
   <div class="mainDiv" v-loading="loading">
     <div class="topDiv">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+      <el-menu default-active="2" class="el-menu-demo" mode="horizontal">
         <el-menu-item index="1" disabled>
           <img src="@/assets/static_images/wdnm.png" class="topImageDiv">
         </el-menu-item>
@@ -10,11 +10,11 @@
         <el-menu-item index="4" @click="selectChange(2)">未完结</el-menu-item>
         <el-submenu index="5">
           <template slot="title">更多功能</template>
-          <el-menu-item index="5-1"><a href="/#/login">回到主站</a></el-menu-item>
-          <el-menu-item index="5-2" disabled><a href="/#/404">AI词库</a></el-menu-item>
-          <el-menu-item index="5-3"><a href="/#/setu">爬虫图床</a></el-menu-item>
-          <el-menu-item index="5-4"><a href="/#/selectImage">识图工具</a></el-menu-item>
-          <el-menu-item index="5-5"><a href="/#/openApiDoc">接口文档工具</a></el-menu-item>
+          <el-menu-item index="5-1"><router-link to="/login">回到主站</router-link></el-menu-item>
+          <el-menu-item index="5-2"><router-link to="/404">AI词库</router-link></el-menu-item>
+          <el-menu-item index="5-3"><router-link to="/setu">爬虫图床</router-link></el-menu-item>
+          <el-menu-item index="5-4"><router-link to="/selectImage">识图工具</router-link></el-menu-item>
+          <el-menu-item index="5-5"><router-link to="/openApiDoc">接口文档工具</router-link></el-menu-item>
         </el-submenu>
         <el-menu-item index="6" style="float: right;">
           <el-input v-model="chineseName" placeholder="请输入小说标题">
@@ -83,7 +83,6 @@
     name: 'fictionMain',
     data() {
       return {
-        activeIndex: '2',
         chineseName: '',
         isEnd: null,
 
