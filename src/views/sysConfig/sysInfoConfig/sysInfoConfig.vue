@@ -22,8 +22,8 @@
           <el-descriptions-item label="系统空余内存">{{systemMerony.utilizationMemory}}</el-descriptions-item>
           <el-descriptions-item label="JVM空余内存">{{systemMerony.memoryUtilization}}</el-descriptions-item>
           <el-descriptions-item label="CPU用户占用">{{systemMerony.cpuUserUse}}</el-descriptions-item>
-          <el-descriptions-item label="系统内存占比">{{systemMerony.memoryP * 100}} %</el-descriptions-item>
-          <el-descriptions-item label="JVM内存占比">{{systemMerony.jvmP * 100}} %</el-descriptions-item>
+          <el-descriptions-item label="系统内存占比">{{(systemMerony.memoryP * 100).toFixed(2)}} %</el-descriptions-item>
+          <el-descriptions-item label="JVM内存占比">{{(systemMerony.jvmP * 100).toFixed(2)}} %</el-descriptions-item>
           <el-descriptions-item label="CPU空余占比">{{systemMerony.cpuLeisure}}</el-descriptions-item>
       </el-descriptions>
     </div>
@@ -59,6 +59,7 @@
       </el-pagination>
     </div>
     <el-divider></el-divider>
+    
     <div id="main" style="margin-top: 20px;height: 450px;"></div>
 
     <div id="memory" style="margin-top: 20px;height: 450px;"></div>
@@ -80,8 +81,8 @@
         pageSize: 10,//当前页展示条数
         currentPage: 1,//所在页数
         selectSysInfoList: [],//表格数据
-        systemInfo: null, //系统数据
-        systemMerony: null, //内存数据
+        systemInfo: [], //系统数据
+        systemMerony: [], //内存数据
         systemDic: [],  //磁盘信息
         systemId: null,   //系统ID
         loadingTab: false,//加载
@@ -90,14 +91,6 @@
       }
     },
     methods: {
-      //获取当前日期
-      getDay(){
-        let now = new Date();
-        let year = now.getFullYear();
-        let month = now.getMonth() + 1;
-        let day = now.getDate();
-        return year + "-" + month + "-" + day;
-      },
       //查询重置集成
       sendNach(){
         this.pageSize = 10;
@@ -117,10 +110,10 @@
       getSystemConfig(){
         getSystemConfigApi({}).then((data) => {
           this.systemInfo = data.data
-          this.getSystemMerony(data.data.id);
-          this.selectDic(data.data.id);
-          this.echartFindList(data.data.id);
-          this.echartNetWorkList(data.data.id);
+          setTimeout(() => {
+             this.getSystemMerony(data.data.id);
+             this.selectDic(data.data.id);
+          }, 500)
         })
       },
       getSystemMerony(id){
@@ -138,8 +131,8 @@
           this.systemDic = data.data
         })
       },
-      echartFindList(id){
-        echartFindListApi({systemId: id}).then((data) => {
+      echartFindList(){
+        echartFindListApi({}).then((data) => {
           let days = [];
           let datas = data.data;
 
@@ -154,8 +147,8 @@
           this.drawMemory(days, useMemory, utilizationMemory);
         })
       },
-      echartNetWorkList(id){
-        echartNetWorkListApi({systemId: id}).then((data) => {
+      echartNetWorkList(){
+        echartNetWorkListApi({}).then((data) => {
           let days = [];
           let datas = data.data;
 
@@ -166,7 +159,6 @@
             txPer.push(datas[a].txPercent);
             rxPer.push(datas[a].rxPercent);
           }
-          console.log(txPer,rxPer)
           this.drawChart(days, txPer, rxPer);
         })
       },
@@ -255,6 +247,10 @@
     },
     created() {
       this.getSystemConfig();
+    },
+    mounted() {
+      this.echartFindList();
+      this.echartNetWorkList();
     }
   }
 </script>
