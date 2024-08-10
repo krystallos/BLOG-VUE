@@ -44,6 +44,7 @@
           width="300">
           <template slot-scope="scope">
             <el-button v-if="scope.row.isFile == '0'" @click="handleShare(scope.row.ids, scope.row.projectName, scope.row.createName)" type="success" size="small" plain>分享</el-button>
+            <el-button v-if="scope.row.isFile == '0'" @click="handleKeyDetial(scope.row.ids)" type="primary" size="small" plain>查看Key</el-button>
             <el-button v-if="scope.row.isFile == '1'" @click="handleDetial(scope.row.ids)" type="primary" size="small" plain>查看</el-button>
             <el-button @click="handleEdit(scope.row.ids, scope.row.projectName)" type="info" size="small" plain>编辑</el-button>
             <el-button @click="handleDel(scope.row.ids)" type="danger" size="small" plain>删除</el-button>
@@ -96,6 +97,22 @@
       </div>
       <span slot="footer" class="dialog-footer"></span>
     </el-dialog>
+    <el-dialog
+      v-if="dialogKeyVisible"
+      title="API邀请码"
+      :visible.sync="dialogKeyVisible"
+      width="50%"
+      top="35px"
+      :modal='true'
+      :destroy-on-close='true'
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      >
+      <div>
+        <sysRstHttpKeyDetial :dialogKeyVisible.sync="dialogKeyVisible" :projectId="projectId"/>
+      </div>
+      <span slot="footer" class="dialog-footer"></span>
+    </el-dialog>
   </div>
 </template>
 
@@ -103,12 +120,14 @@
 
   import { rstPostList, rstPostDeleteApi, editRstPostApi } from '@/api/sysRstHttpApi'
   import sysRstHttpDetial from './sysRstHttpDetial.vue'
+  import sysRstHttpKeyDetial from './sysRstHttpKeyDetial.vue'
   import sysRstHttpInsert from './sysRstHttpInsert.vue'
 
   export default {
     name: 'sysRstHttp',
     components: {
       sysRstHttpDetial,
+      sysRstHttpKeyDetial,
       sysRstHttpInsert
     },
     data () {
@@ -121,6 +140,7 @@
 
         dialogVisible: false,
         dialogInsertVisible: false,
+        dialogKeyVisible: false,
         projectName: '',
         projectId: '',
       }
@@ -186,6 +206,10 @@
             }, 500)
           })
         })
+      },
+      handleKeyDetial(id){
+        this.projectId = id;
+        this.dialogKeyVisible = true;
       },
       insertProject(){
         this.dialogInsertVisible = true;

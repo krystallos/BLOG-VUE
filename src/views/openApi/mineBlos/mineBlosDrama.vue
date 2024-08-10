@@ -29,7 +29,7 @@
     </div>
     <div class="groupTime">
       <el-row>
-        <el-col :span="8" v-for="item in findListGroup" class="groupBox">
+        <el-col :span="6" v-for="item in findListGroup" class="groupBox">
           <el-card :body-style="{ padding: '0px' }">
             <el-image :src="htmlReplace($hostURL + item.dramaPath + item.dramaImage)" fit="cover" style="height: 300px;" lazy></el-image>
             <div style="padding:0 14px 14px 14px;">

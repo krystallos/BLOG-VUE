@@ -1,69 +1,50 @@
 <template>
   <div>
-    <div>
-      <!-- 顶部按钮 -->
-      <el-row :gutter="20">
-        <el-col :span="4">
-          <el-date-picker
-            v-model="createDate"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd">
-          </el-date-picker>
-        </el-col>
-        <el-col :span="2">
-          <el-button type="primary" plain @click="sendNach">查询</el-button>
-        </el-col>
-      </el-row>
+    <div style="margin: 30px;">
+      <el-descriptions title="系统基本信息" border :column="3">
+          <el-descriptions-item label="系统名称">{{systemInfo.systemName}}</el-descriptions-item>
+          <el-descriptions-item label="系统类型">{{systemInfo.systemType}}</el-descriptions-item>
+          <el-descriptions-item label="CPU型号">{{systemInfo.cpuName}}</el-descriptions-item>
+          <el-descriptions-item label="内部IP">{{systemInfo.ip}}</el-descriptions-item>
+          <el-descriptions-item label="启动时间">{{systemInfo.startTime}}</el-descriptions-item>
+          <el-descriptions-item label="运行时长">{{(systemInfo.runtime / 1000 / 60 / 60).toFixed(2)}} 小时</el-descriptions-item>
+      </el-descriptions>
+    </div>
+    <el-divider></el-divider>
+    <div style="margin: 30px;">
+      <el-descriptions title="内存占用信息" border :column="3">
+          <el-descriptions-item label="系统总内存">{{systemMerony.allMemory}}</el-descriptions-item>
+          <el-descriptions-item label="JVM总内存">{{systemMerony.memoryMax}}</el-descriptions-item>
+          <el-descriptions-item label="CPU总核心">{{systemMerony.cpuCode}} 核心</el-descriptions-item>
+          <el-descriptions-item label="系统使用内存">{{systemMerony.useMemory}}</el-descriptions-item>
+          <el-descriptions-item label="JVM使用内存">{{systemMerony.memoryUse}}</el-descriptions-item>
+          <el-descriptions-item label="CPU系统占比">{{systemMerony.cpuSystemUse}}</el-descriptions-item>
+          <el-descriptions-item label="系统空余内存">{{systemMerony.utilizationMemory}}</el-descriptions-item>
+          <el-descriptions-item label="JVM空余内存">{{systemMerony.memoryUtilization}}</el-descriptions-item>
+          <el-descriptions-item label="CPU用户占用">{{systemMerony.cpuUserUse}}</el-descriptions-item>
+          <el-descriptions-item label="系统内存占比">{{systemMerony.memoryP * 100}} %</el-descriptions-item>
+          <el-descriptions-item label="JVM内存占比">{{systemMerony.jvmP * 100}} %</el-descriptions-item>
+          <el-descriptions-item label="CPU空余占比">{{systemMerony.cpuLeisure}}</el-descriptions-item>
+      </el-descriptions>
+    </div>
+    <el-divider></el-divider>
+    <div style="margin: 30px;">
       <!-- 表格 -->
       <el-table
         v-loading="loadingTab"
-        :data="selectSysInfoList"
+        :data="systemDic"
         style="width: 100%">
-        <el-table-column prop="timeMillis" label="更新步进"></el-table-column>
-        <el-table-column prop="systemNum" label="系统名称" width="150px"></el-table-column>
-        <el-table-column prop="cpuCode" label="CPU核心数">
+        <el-table-column prop="dirName" label="磁盘名称" width="220"></el-table-column>
+        <el-table-column prop="description" label="磁盘格式" width="220"></el-table-column>
+        <el-table-column prop="fsType" label="磁盘类型" width="200"></el-table-column>
+        <el-table-column prop="total" label="磁盘总量" width="200"></el-table-column>
+        <el-table-column prop="used" label="磁盘使用量" width="200"></el-table-column>
+        <el-table-column prop="userP" label="磁盘使用占比" width="200">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.cpuCode }}核</span>
+            <span style="margin-left: 10px">{{ (scope.row.userP * 100).toFixed(2) }} %</span>
           </template>
         </el-table-column>
-        <el-table-column prop="cpuUtilization" label="CPU总利用率">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.cpuUtilization }}%</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="cpuSystemUse" label="CPU系统占用率">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.cpuSystemUse }}%</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="cpuUserUse" label="CPU用户占用率">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.cpuUserUse }}%</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="cpuLeisure" label="CPU闲置率">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.cpuLeisure }}%</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="allMemory" label="总内存">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.allMemory }}GB</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="utilizationMemory" label="剩余内存">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.utilizationMemory }}GB</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="useMemory" label="使用内存">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.useMemory }}GB</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createDate" label="创建时间" width="170px"></el-table-column>
+        <el-table-column prop="uuid" label="磁盘UUID"></el-table-column>
       </el-table>
       <div style="padding-top: 10px;"></div>
       <!-- 分页器 -->
@@ -77,7 +58,7 @@
         :total="total">
       </el-pagination>
     </div>
-
+    <el-divider></el-divider>
     <div id="main" style="margin-top: 20px;height: 450px;"></div>
 
     <div id="memory" style="margin-top: 20px;height: 450px;"></div>
@@ -86,7 +67,7 @@
 </template>
 
 <script>
-  import {selectSysInfoApi, echartFindListApi } from '@/api/sysInfoConfig'
+  import {selectDicApi, echartFindListApi, echartNetWorkListApi, getSystemConfigApi, getSystemMeronyApi } from '@/api/sysInfoConfig'
   import { getToken } from '@/utils/auth'
 
   import * as echarts from 'echarts';
@@ -99,10 +80,13 @@
         pageSize: 10,//当前页展示条数
         currentPage: 1,//所在页数
         selectSysInfoList: [],//表格数据
+        systemInfo: null, //系统数据
+        systemMerony: null, //内存数据
+        systemDic: [],  //磁盘信息
+        systemId: null,   //系统ID
         loadingTab: false,//加载
 
-        dialogVisible: false,
-        createDate: null
+        dialogVisible: false
       }
     },
     methods: {
@@ -118,122 +102,73 @@
       sendNach(){
         this.pageSize = 10;
         this.currentPage = 1;
-        this.selectSysInfo();
+        this.selectDic(null);
       },
       //修改当前页数
       handleSizeChange(val) {
         this.pageSize = val;
-        this.selectSysInfo();
+        this.selectDic(null);
       },
       //修改所在页数
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.selectSysInfo();
+        this.selectDic(null);
       },
-      //列表接口集成
-      selectSysInfo(){
-        if(this.createDate == null){
-          this.createDate = getDay();
-        }else{
-          if(this.createDate.split("-").length == 3){
-            let mon = this.createDate.split("-")[1];
-            let day = this.createDate.split("-")[2];
-            if(this.createDate.split("-")[1].length == 1){
-              mon = "0" + this.createDate.split("-")[1];
-            }
-            if(this.createDate.split("-")[2].length == 1){
-              day = "0" + this.createDate.split("-")[2]
-            }
-            this.createDate = this.createDate.split("-")[0] + "-" + mon + "-" + day;
-          }
-          console.log(this.createDate)
-        }
-        this.loadingTab = true;
-        selectSysInfoApi({nowTab: this.currentPage, hasTab: this.pageSize, createDate: this.createDate}).then((data) => {
-          this.total = data.total;
-          this.selectSysInfoList = data.data;
-          setTimeout(() => {
-             this.loadingTab = false;
-          }, 1000)
+      getSystemConfig(){
+        getSystemConfigApi({}).then((data) => {
+          this.systemInfo = data.data
+          this.getSystemMerony(data.data.id);
+          this.selectDic(data.data.id);
+          this.echartFindList(data.data.id);
+          this.echartNetWorkList(data.data.id);
         })
       },
-      echartFindList(){
-        echartFindListApi({}).then((data) => {
+      getSystemMerony(id){
+        getSystemMeronyApi({systemId: id}).then((data) => {
+          this.systemMerony = data.data
+        })
+      },
+      selectDic(id){
+        if(id != null){
+          this.systemId = id;
+        }else{
+          id = this.systemId;
+        }
+        selectDicApi({systemId: id, nowTab: this.currentPage, hasTab: this.pageSize}).then((data) => {
+          this.systemDic = data.data
+        })
+      },
+      echartFindList(id){
+        echartFindListApi({systemId: id}).then((data) => {
           let days = [];
-          let echartDatas = [];
           let datas = data.data;
 
-          let cpuUtilization = [];
-          let cpuSystemUse = [];
           let cpuUserUse = [];
           let useMemory = [];
           let utilizationMemory = [];
           for(let a = 0; a < datas.length; a++){
             days.push(datas[a].createDate + '时');
-            cpuUtilization.push(datas[a].cpuUtilization);
-            cpuSystemUse.push(datas[a].cpuSystemUse);
-            cpuUserUse.push(datas[a].cpuUserUse);
             useMemory.push(datas[a].useMemory);
             utilizationMemory.push(datas[a].utilizationMemory);
           }
-          this.drawChart(days, cpuUtilization, cpuSystemUse, cpuUserUse);
           this.drawMemory(days, useMemory, utilizationMemory);
         })
       },
-      drawChart(days, cpuUtilization, cpuSystemUse, cpuUserUse){
-        let datas = [];
+      echartNetWorkList(id){
+        echartNetWorkListApi({systemId: id}).then((data) => {
+          let days = [];
+          let datas = data.data;
 
-        // 基于准备好的dom，初始化echarts实例
-        let myChart = echarts.init(document.getElementById('main'));
-
-        var option = {
-          title: {
-              text: '24小时系统占用数据'
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          legend: {
-            data: ['CPU利用率(%)', 'CPU系统使用率(%)', 'CPU用户使用率(%)']
-          },
-          xAxis: [{
-              type: 'category',
-              data: days
-          }],
-          yAxis: [{type: 'value'}
-          ],
-          series: [
-            {
-              name: 'CPU利用率(%)',
-              type: 'bar',
-              emphasis: {
-                focus: 'series'
-              },
-              data: cpuUtilization
-            },
-            {
-              name: 'CPU系统使用率(%)',
-              type: 'bar',
-              emphasis: {
-                focus: 'series'
-              },
-              data: cpuSystemUse
-            },
-            {
-              name: 'CPU用户使用率(%)',
-              type: 'bar',
-              emphasis: {
-                focus: 'series'
-              },
-              data: cpuUserUse
-            }
-          ]
-        };
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+          let txPer = [];
+          let rxPer = [];
+          for(let a = 0; a < datas.length; a++){
+            days.push(datas[a].createDate + '时');
+            txPer.push(datas[a].txPercent);
+            rxPer.push(datas[a].rxPercent);
+          }
+          console.log(txPer,rxPer)
+          this.drawChart(days, txPer, rxPer);
+        })
       },
       drawMemory(days, useMemory, utilizationMemory){
         // 基于准备好的dom，初始化echarts实例
@@ -269,18 +204,57 @@
         };
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+      },
+      drawChart(days, txPer, rxPer){
+        let datas = [];
+
+        // 基于准备好的dom，初始化echarts实例
+        let myChart = echarts.init(document.getElementById('main'));
+
+        var option = {
+          title: {
+              text: '24小时网络占用'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          legend: {
+            data: ['网络上行(KB)', '网络下行(KB)']
+          },
+          xAxis: [{
+              type: 'category',
+              data: days
+          }],
+          yAxis: [{type: 'value'}
+          ],
+          series: [
+            {
+              name: '网络上行(KB)',
+              type: 'bar',
+              emphasis: {
+                focus: 'series'
+              },
+              data: txPer
+            },
+            {
+              name: '网络下行(KB)',
+              type: 'bar',
+              emphasis: {
+                focus: 'series'
+              },
+              data: rxPer
+            }
+          ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
       }
     },
     created() {
-      let now = new Date();
-      let year = now.getFullYear();
-      let month = now.getMonth() + 1;
-      let day = now.getDate();
-      this.createDate = year + "-" + month + "-" + day;
-      this.selectSysInfo();
-    },
-    mounted() {
-      this.echartFindList();
+      this.getSystemConfig();
     }
   }
 </script>

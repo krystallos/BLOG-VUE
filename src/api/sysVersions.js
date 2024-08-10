@@ -62,3 +62,12 @@ export function sysVersionsWebIssApi(data) {
     data
   })
 }
+
+// 确认通告
+export function sysVersionsSessionIssApi(data) {
+  return request({
+    url: '/open/sysVersionsSessionIss.act',
+    method: 'post',
+    data
+  })
+}

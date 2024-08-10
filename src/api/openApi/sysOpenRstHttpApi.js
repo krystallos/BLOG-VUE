@@ -35,3 +35,12 @@ export function getOpenRstApiDetialApi(data) {
     data
   })
 }
+
+// 校验API邀请码
+export function getOpenRstApiKeyApi(data) {
+  return request({
+    url: '/open/getOpenRstApiKey.act',
+    method: 'post',
+    data
+  })
+}

@@ -89,3 +89,30 @@ export function saveRstPostApi(data) {
     data
   })
 }
+
+// 生成Key
+export function insertRstKeyApi(data) {
+  return request({
+    url: '/api/insertRstKey.act',
+    method: 'post',
+    data
+  })
+}
+
+// 获取Key列表
+export function getRstPostKeyListApi(data) {
+  return request({
+    url: '/api/getRstPostKeyList.act',
+    method: 'post',
+    data
+  })
+}
+
+// 删除Key
+export function delRstApiKeyApi(data) {
+  return request({
+    url: '/api/delRstApiKey.act',
+    method: 'post',
+    data
+  })
+}

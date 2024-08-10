@@ -125,8 +125,8 @@
 
 <script>
 
-  import { rstOpenPostList } from '@/api/openApi/sysOpenRstHttpApi'
-  import { selectSessionSysVersionsApi } from '@/api/sysVersions.js'
+  import { rstOpenPostList, getOpenRstApiKeyApi } from '@/api/openApi/sysOpenRstHttpApi'
+  import { selectSessionSysVersionsApi, sysVersionsSessionIssApi } from '@/api/sysVersions'
   import sysOpenRstHttpDetial from './sysOpenRstHttpDetial.vue'
 
   export default {
@@ -151,22 +151,18 @@
       }
     },
     methods: {
-      selectSessionSysVersions(){
-        let nowTime = new Date().getTime();
-        if(localStorage.getItem("httpApiVersion") == null || localStorage.getItem("httpApiVersion") < nowTime) {
-          let date = new Date();
-          let day = date.getDate();
-          date.setDate(day + 5);
-          localStorage.setItem("httpApiVersion", date.getTime())
-          selectSessionSysVersionsApi({}).then((data) => {
-            if(data.data != null){
-              this.$alert(data.data.verType, data.data.verName, {
-                dangerouslyUseHTMLString: true,
-                confirmButtonText: '我已了解'
-              });
-            }
-          })
-        }
+      selectSessionSysVersions(key){
+        selectSessionSysVersionsApi({session: key}).then((data) => {
+          if(data.data != null){
+            this.$alert(data.data.verType, data.data.verName, {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '我已了解',
+              callback: action => {
+                sysVersionsSessionIssApi({ids :data.data.ids, session :key}).then((data) => {})
+              }
+            });
+          }
+        })
       },
       //查询重置集成
       selectFor(){
@@ -185,14 +181,27 @@
         this.rstPostListApi();
       },
       //列表接口集成
-      rstPostListApi(){
+      rstPostListApi(Key){
         this.loadingTab = true;
+
         rstOpenPostList({nowTab: this.currentPage, hasTab: this.pageSize, projectName: this.projectName ,ids: this.projectId}).then((data) => {
           this.total = data.total;
           this.projectList = data.data;
           setTimeout(() => {
              this.loadingTab = false;
           }, 500)
+        })
+      },
+      handleOpenRstApiKey(key){
+        getOpenRstApiKeyApi({rstKey: key, rstIds: this.projectId}).then((data) => {
+          if(data.data.rstKey == null || data.data.rstKey != key){
+            this.$message.error("校验码错误");
+            localStorage.removeItem("httpApiKey");
+          }else{
+            localStorage.setItem("httpApiKey", data.data.rstKey);
+            this.rstPostListApi();
+            this.selectSessionSysVersions(data.data.rstKey);
+          }
         })
       },
       handleDetial(id){
@@ -213,8 +222,29 @@
     },
     created() {
       this.urlHanlden();
-      this.selectSessionSysVersions();
-      this.rstPostListApi();
+
+      let key = localStorage.getItem("httpApiKey");
+      if(key == null || key == ""){
+        this.$prompt('请输入邀请码：', '邀请码校验', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPlaceholder: '',
+          showCancelButton: false,
+          closeOnClickModal: false,
+          closeOnPressEscape: false,
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              if(instance.inputValue == null || instance.inputValue == ''){
+                this.$message.error("前缀名称不能为空");
+              }else{done();}
+            }
+          }
+        }).then(({value}) => {
+          this.handleOpenRstApiKey(value);
+        })
+      }else{
+        this.handleOpenRstApiKey(key);
+      }
     }
   }
 
