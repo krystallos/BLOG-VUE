@@ -39,13 +39,7 @@
           <span class="blosMsgSpan">2021.06 网站建立</span>
         </el-timeline-item>
         <el-timeline-item>
-          <span class="blosMsgSpan">2021.08 网站投入使用，首篇文章生成</span>
-        </el-timeline-item>
-        <el-timeline-item>
-          <span class="blosMsgSpan">2021.12 实现图床功能，预计以每年1至1.5万张进度持续爬取高质量艺术作品</span>
-        </el-timeline-item>
-        <el-timeline-item>
-          <span class="blosMsgSpan">2022.04 完善网站功能，植入邮件、图片查询、小说等功能</span>
+          <span class="blosMsgSpan">2021.12 实现图床爬虫，将以每年1至1.5万张进度持续爬取高质量艺术作品</span>
         </el-timeline-item>
         <el-timeline-item>
           <span class="blosMsgSpan">2022.10 首次对博客功能进行升级，引入图片深度学习功能</span>
@@ -57,10 +51,10 @@
           <span class="blosMsgSpan">2023.06 网站整体升级，从原先的LayerUI升级为ElmUI，后端改为Spring分布式部署</span>
         </el-timeline-item>
         <el-timeline-item>
-          <span class="blosMsgSpan">2023.09 添加个人账单、添加性能监控</span>
+          <span class="blosMsgSpan">2024.01 网站第二次友好度、硬件配置升级</span>
         </el-timeline-item>
         <el-timeline-item>
-          <span class="blosMsgSpan">2024.01 网站第二次整体升级、SEO友好度提升至96/100</span>
+          <span class="blosMsgSpan">2024.07 图形图像采用基于深度学习的各向同性ConvNeXt-T模型，再次提升爬虫智能化</span>
         </el-timeline-item>
         <el-timeline-item>
           <span class="blosMsgSpan">新的一年，新的计划部署......</span>

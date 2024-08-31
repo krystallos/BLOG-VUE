@@ -274,6 +274,7 @@ export default {
     max-width: var(--max-width);
     overflow: hidden;
     width: 100%;
+    opacity: 0.8;
   }
 
   .container__form {

@@ -2,15 +2,43 @@
   <div>
     <div>
       <!-- 顶部按钮 -->
-      <el-row :gutter="20">
-        <el-col :span="6">
+      <el-row :gutter="24">
+        <!-- <el-col :span="3">
           <el-input v-model="order" placeholder="交易订单号"></el-input>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <el-col :span="3">
           <el-input v-model="payPerson" placeholder="交易方"></el-input>
         </el-col>
-        <el-col :span="4">
-          <el-input v-model="moneyOrder" placeholder="金额(可在金额前加入大小于号)"></el-input>
+        <el-col :span="3">
+          <el-input v-model="commodity" placeholder="交易商品"></el-input>
+        </el-col>
+        <el-col :span="3">
+          <el-input v-model="moneyOrder" placeholder="金额(可使用大小于号)"></el-input>
+        </el-col>
+        <el-col :span="3">
+          <el-select v-model="incomeOrExpenditure" placeholder="收支类型">
+            <el-option label="" value=""></el-option>
+            <el-option label="支出" value="支出"></el-option>
+            <el-option label="收入" value="收入"></el-option>
+            <el-option label="不计收支" value="不计收支"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+          <el-select v-model="payMonth" placeholder="月份">
+            <el-option label="" value=''></el-option>
+            <el-option label="1月" value='01'></el-option>
+            <el-option label="2月" value='02'></el-option>
+            <el-option label="3月" value='03'></el-option>
+            <el-option label="4月" value='04'></el-option>
+            <el-option label="5月" value='05'></el-option>
+            <el-option label="6月" value='06'></el-option>
+            <el-option label="7月" value='07'></el-option>
+            <el-option label="8月" value='08'></el-option>
+            <el-option label="9月" value='09'></el-option>
+            <el-option label="10月" value='10'></el-option>
+            <el-option label="11月" value='11'></el-option>
+            <el-option label="12月" value='12'></el-option>
+          </el-select>
         </el-col>
         <el-col :span="4">
           <el-date-picker
@@ -38,6 +66,19 @@
           </el-upload>
         </el-col>
       </el-row>
+      <el-divider content-position="left">统计视图</el-divider>
+      <!-- 统计信息 -->
+      <div style="margin: 25px 0 0 15px;">
+        <el-descriptions>
+            <el-descriptions-item label="当年累计消费"><span style="font-weight: bold;">{{appAlyCount.yearOut}} 元</span></el-descriptions-item>
+            <el-descriptions-item label="当年累计收入"><span style="font-weight: bold;">{{appAlyCount.yearIn}} 元</span></el-descriptions-item>
+            <el-descriptions-item label="当年最大笔消费"><span style="font-weight: bold;">{{appAlyCount.yearMax}} 元</span></el-descriptions-item>
+            <el-descriptions-item label="当月累计消费"><span style="font-weight: bold;">{{appAlyCount.monthOut}} 元</span></el-descriptions-item>
+            <el-descriptions-item label="当月累计收入"><span style="font-weight: bold;">{{appAlyCount.monthIn}} 元</span></el-descriptions-item>
+            <el-descriptions-item label="当月最大笔消费"><span style="font-weight: bold;">{{appAlyCount.monthMax}} 元</span></el-descriptions-item>
+        </el-descriptions>
+      </div>
+      <el-divider content-position="left">表格</el-divider>
       <!-- 表格 -->
       <el-table
         v-loading="loadingTab"
@@ -77,12 +118,35 @@
             value-format="yyyy">
           </el-date-picker>
         </el-col>
-        <el-col :span="4">
-          <el-switch
-            v-model="outMoney"
-            active-text="高于1000"
-            inactive-text="低于1000">
-          </el-switch>
+        <el-col :span="3">
+          <el-select v-model="month" placeholder="月份">
+            <el-option label="" value=''></el-option>
+            <el-option label="1月" value='01'></el-option>
+            <el-option label="2月" value='02'></el-option>
+            <el-option label="3月" value='03'></el-option>
+            <el-option label="4月" value='04'></el-option>
+            <el-option label="5月" value='05'></el-option>
+            <el-option label="6月" value='06'></el-option>
+            <el-option label="7月" value='07'></el-option>
+            <el-option label="8月" value='08'></el-option>
+            <el-option label="9月" value='09'></el-option>
+            <el-option label="10月" value='10'></el-option>
+            <el-option label="11月" value='11'></el-option>
+            <el-option label="12月" value='12'></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+            <el-select v-model="incomeInOut" placeholder="收支类型">
+              <el-option label="支出" value="支出"></el-option>
+              <el-option label="收入" value="收入"></el-option>
+              <el-option label="不计收支" value="不计收支"></el-option>
+            </el-select>
+        </el-col>
+        <el-col :span="3">
+          <el-select v-model="outMoney" placeholder="消费区间">
+            <el-option label="低于1000" value='false'></el-option>
+            <el-option label="高于1000" value='true'></el-option>
+          </el-select>
         </el-col>
         <el-col :span="3">
           <el-button type="primary" plain @click="echartConsumptionLeft">查询年-日趋月消费</el-button>
@@ -95,7 +159,7 @@
 </template>
 
 <script>
-  import {consumptionListApi, echartConsumptionLeftApi } from '@/api/alyConsumption'
+  import {consumptionListApi, echartConsumptionLeftApi, consumptionDescriptionsApi } from '@/api/alyConsumption'
   import { getToken } from '@/utils/auth'
 
   import * as echarts from 'echarts';
@@ -108,10 +172,16 @@
         payPerson: '',
         moneyOrder: '',
         payTime: '',
+        payMonth: '',
+        commodity: '',
+        incomeOrExpenditure: '',
         year: '',
+        incomeInOut: '支出',
+        month: '',
         /* 表格 */
         loadingTab: false,
         appAlyTab: [],
+        appAlyCount: [],
         total: 1,
         currentPage: 1,
         pageSize: 10,
@@ -123,7 +193,7 @@
         /* 折线图*/
         monthDatas: [],
         /* 折线图切换 */
-        outMoney: false
+        outMoney: 'false'
       }
     },
     methods: {
@@ -156,8 +226,11 @@
           hasTab: this.pageSize,
           payPerson: this.payPerson,
           moneyOrder: this.moneyOrder,
+          commodity: this.commodity,
+          incomeOrExpenditure: this.incomeOrExpenditure,
           order: this.order,
           payTime: this.payTime,
+          payMonth: this.payMonth
         }).then((data) => {
           this.total = data.total;
           this.appAlyTab = data.data;
@@ -166,8 +239,20 @@
           }, 1000)
         })
       },
+      getAlyTab(){
+        if(this.payTime == null || this.payTime == ''){
+          this.payTime = new Date().getFullYear() + '';
+        }
+        consumptionDescriptionsApi({
+          year: this.payTime,
+          month: this.payMonth
+        }).then((data) => {
+          this.appAlyCount = data.data;
+        })
+      },
       //搜索记录
       sendNach(){
+        this.getAlyTab();
         this.getAlyList();
       },
       echartConsumptionLeft(){
@@ -177,7 +262,7 @@
         let orderTypes = '';
         orderTypes = this.outMoney
         this.monthDatas = [];
-        echartConsumptionLeftApi({beginTime: this.year, orderType: orderTypes}).then((data) => {
+        echartConsumptionLeftApi({beginTime: this.year, orderType: orderTypes, incomeInOut: this.incomeInOut, month: this.month}).then((data) => {
           if(data.code == 200){
             let map = data.data;
             let valType = [];
@@ -247,6 +332,7 @@
     },
     created() {
       this.getAlyList();
+      this.getAlyTab();
     },
     mounted() {
       this.echartConsumptionLeft();

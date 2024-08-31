@@ -220,8 +220,7 @@
               type: 'category',
               data: days
           }],
-          yAxis: [{type: 'value'}
-          ],
+          yAxis: [{type: 'value',scale: true}],
           series: [
             {
               name: '网络上行(KB)',
