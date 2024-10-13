@@ -42,8 +42,8 @@
         <div class="imageDiv" v-for="(item, index) in srcList">
           <el-image
             style="width: 320px; height: 300px; padding: 15px;"
-            :src="$hostURL + item.thumbnail"
-            @click="openImage($hostURL + item.pathName)"
+            :src="$hostURL + item.thumbnail + htmlReplace(item.fileName)"
+            @click="openImage($hostURL + item.pathName + htmlReplace(item.fileName))"
             :preview-src-list="srcImage"
             lazy
           >
@@ -130,6 +130,9 @@
       }
     },
     methods: {
+      htmlReplace(sHtml) {
+        return encodeURIComponent(sHtml);
+      },
       fileRandomPage(){
         this.loading = true;
         let value = 1

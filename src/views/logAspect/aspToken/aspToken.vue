@@ -16,9 +16,14 @@
         v-loading="loadingTab"
         :data="aspTokenTab"
         style="width: 100%">
-        <el-table-column prop="tokenId" label="TokenId"></el-table-column>
-        <el-table-column prop="areaId" label="用户IP"></el-table-column>
-        <el-table-column prop="createDate" label="访问时间" width="250"></el-table-column>
+        <el-table-column prop="requestId" label="操作ID" width="350"></el-table-column>
+        <el-table-column prop="domainName" label="域名"></el-table-column>
+        <el-table-column prop="line" label="主要线路" width="150"></el-table-column>
+        <el-table-column prop="rr" label="属性" width="100"></el-table-column>
+        <el-table-column prop="status" label="操作状态" width="100"></el-table-column>
+        <el-table-column prop="type" label="代理域名类型" width="150"></el-table-column>
+        <el-table-column prop="value" label="IP" width="300"></el-table-column>
+        <el-table-column prop="updateTimestamp" label="更新时间戳"></el-table-column>
       </el-table>
       <!-- 表格 -->
       <div style="margin-top: 15px;"></div>

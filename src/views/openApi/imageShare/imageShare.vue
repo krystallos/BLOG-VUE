@@ -20,9 +20,9 @@
     <div style="margin: 10px 0 0 10px;" v-if="imageList.length > 0" v-for="(item , index) in imageList">
       <el-card class="imageBox" shadow="always">
         <el-image
-          :src="$hostURL + '/imgItem/' + item.filePath"
+          :src="$hostURL + '/imgItem/' + item.filePath + htmlReplace(item.fileName)"
           :preview-src-list="srcImage"
-          @click="openImage($hostURL + '/img/' + item.filePath)"
+          @click="openImage($hostURL + '/img/' + item.filePath + htmlReplace(item.fileName))"
           lazy>
         </el-image>
         <div style="padding: 5px;">
@@ -56,6 +56,9 @@
       };
     },
     methods: {
+      htmlReplace(sHtml) {
+        return encodeURIComponent(sHtml);
+      },
       //打开图片
       openImage(url){
         this.srcImage = [];
