@@ -24,6 +24,7 @@
         <el-table-column prop="type" label="代理域名类型" width="150"></el-table-column>
         <el-table-column prop="value" label="IP" width="300"></el-table-column>
         <el-table-column prop="updateTimestamp" label="更新时间戳"></el-table-column>
+        <el-table-column prop="createDate" label="更新时间"></el-table-column>
       </el-table>
       <!-- 表格 -->
       <div style="margin-top: 15px;"></div>
