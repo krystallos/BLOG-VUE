@@ -1,23 +1,26 @@
 <template>
   <div>
     <div>
-      <el-select v-model="pathId" style="width: 100%;" placeholder="文件配置路径" ref='selectLable' @change="getLabel">
-        <el-option
-          v-for="item in listPath"
-          :key="item.ids"
-          :label="item.filePath"
-          :value="item.ids + ',' + item.isHas">
-        </el-option>
-      </el-select>
+      <el-input placeholder="请输入来自省份" v-model="divSessionPiovince">
+        <template slot="prepend">拍摄省份</template>
+      </el-input>
       <div style="margin-top: 10px;"></div>
-      <el-input placeholder="请输入保存文件夹" v-model="pathName">
-        <template slot="prepend">所属文件夹</template>
+      <el-input placeholder="请输入来自地区" v-model="divSessionRegion">
+        <template slot="prepend">拍摄地区</template>
+      </el-input>
+      <div style="margin-top: 10px;"></div>
+      <el-input placeholder="请输入拍摄年份" v-model="divSessionYear">
+        <template slot="prepend">拍摄年份</template>
+      </el-input>
+      <div style="margin-top: 10px;"></div>
+      <el-input placeholder="请输入拍摄月份" v-model="divSessionMonth">
+        <template slot="prepend">拍摄月份</template>
       </el-input>
       <div style="margin-top: 10px;"></div>
       <el-upload
         ref="upload"
         accept=".jpg, .jpeg, .png"
-        action="/blosBoot/upload/accessFileUpload.act"
+        action="/blosBoot/upload/imageAlbumUpload.act"
         :headers="headers"
         :on-remove="handleRemove"
         :on-change="handleFileList"
@@ -37,20 +40,19 @@
 </template>
 
 <script>
-  import {uploadImageItemApi } from '@/api/fileImage'
+  import {uploadImageItemApi } from '@/api/imageAlbum'
   import { getToken } from '@/utils/auth'
 
   export default {
-    name: 'uploadImaeg',
+    name: 'uploadImaegAlbum',
     data() {
       return {
-        pathId: '',
-        filePath: '',
-        listPath: [],
-        pathName: '',
-        isHas: '',
+        divSessionPiovince: '',
+        divSessionRegion: '',
+        divSessionYear: '',
+        divSessionMonth: '',
         fileList: [],
-        fileConfig: {"lonPathNameType": '',"pathName": '',"pathId": '', "isHas" : ''},
+        fileConfig: {"sessionPiovince": '',"sessionRegion": '', "sessionYear" : '', "sessionMonth": ''},
         headers: {
           "assessToken": getToken()
         },
@@ -59,27 +61,16 @@
       };
     },
     methods: {
-      getLabel(){
-        this.$nextTick(_=>{
-          this.filePath = this.$refs.selectLable.selected.label
-        })
-      },
       submitUpload() {
-        if(this.pathId == null || typeof pathId == undefined){ this.$message.warning("请选择文件路径");return }
-        if(this.pathName == null || this.pathName.length == 0 || typeof pathName == undefined){ this.$message.warning("请选择保存的文件地址");return }
-        this.fileConfig.lonPathNameType = this.$refs.selectLable.selected.label + "/" + this.pathName;
-        this.fileConfig.pathName = this.pathName;
-        this.fileConfig.pathId = this.pathId.split(",")[0];
-        this.fileConfig.isHas = this.pathId.split(",")[1];
+        if(this.divSessionPiovince == null || this.divSessionPiovince == ''){ this.$message.warning("请选择拍摄省份");return };
+        if(this.divSessionRegion == null || this.divSessionRegion == ''){ this.$message.warning("请选择拍摄地区");return };
+        if(this.divSessionYear == null || this.divSessionYear == ''){ this.$message.warning("请选择拍摄年份");return };
+        if(this.divSessionMonth == null || this.divSessionMonth == ''){ this.$message.warning("请选择拍摄月份");return };
+        this.fileConfig.sessionPiovince = this.divSessionPiovince;
+        this.fileConfig.sessionRegion = this.divSessionRegion;
+        this.fileConfig.sessionYear = this.divSessionYear;
+        this.fileConfig.sessionMonth = this.divSessionMonth;
         this.$refs.upload.submit();
-      },
-      uploadImageItem(){
-        uploadImageItemApi({}).then((data) => {
-          if(data.code == 200){
-            let {listPath} = data.data;
-            this.listPath = listPath;
-          }
-        })
       },
       handleRemove(file) {
         this.$message.success(`已将【${ file.name }】移出上传列表`);

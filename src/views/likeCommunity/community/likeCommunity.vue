@@ -108,7 +108,7 @@
 </script>
 
 <style scoped>
-  
+
   .box-card {
     float: left;
     margin: 15px 15px;

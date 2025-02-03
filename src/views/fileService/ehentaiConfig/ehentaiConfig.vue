@@ -24,7 +24,7 @@
     </div>
     <div class="groupTime">
       <el-row>
-        <el-col :span="6" v-for="item in findListGroup" class="groupBox">
+        <el-col :span="4" v-for="item in findListGroup" class="groupBox">
           <el-card :body-style="{ padding: '0px' }">
             <el-image :src="$hostURL + '/ehentai/' + htmlReplace(item.bookName) + item.bookImage" fit="cover" style="height: 300px;" lazy></el-image>
             <div style="padding:0 14px 14px 14px;">
@@ -51,7 +51,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
-      :page-sizes="[8, 16, 24]"
+      :page-sizes="[12, 24, 36]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
@@ -76,7 +76,7 @@
         /* 分页*/
         total: 1,
         currentPage: 1,
-        pageSize: 8,
+        pageSize: 12,
       }
     },
     methods: {
@@ -157,7 +157,7 @@
 
   .groupBox {
     text-align: center;
-    padding: 30px;
+    padding: 10px;
   }
 
   .hentaiTitle {
