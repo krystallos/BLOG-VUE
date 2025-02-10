@@ -14,7 +14,7 @@ const whiteList = [
  '/login', '/regiest','/getBackPw','/setu', '/mineBlos',
  '/mineBlosArticle', '/fictionMain', '/fictionDetial', '/book',
  '/selectImage', '/openApiDoc', '/imageShare', '/mineBlosTimeGroup', '/mineBlosDescription' ,
- '/mineBlosDrama',
+ '/mineBlosDrama', '/openImageAlbum',
  '/404', '/201'
 ]
 

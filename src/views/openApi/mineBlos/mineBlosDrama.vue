@@ -84,7 +84,7 @@
             return;
           }
         }
-        dramaListApi({createId: this.userKey, nowTab: this.currentPage, hasTab: this.pageSize,}).then((data) => {
+        dramaListApi({createId: this.userKey, nowTab: this.currentPage, hasTab: this.pageSize}).then((data) => {
           if(data.code == 200){
             if(type == 'add'){
               let itemList = this.findListGroup;

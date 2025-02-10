@@ -27,6 +27,9 @@
         <el-col :span="2">
           <el-button type="primary" @click="openUploadImage">上传图片</el-button>
         </el-col>
+        <el-col :span="2">
+          <el-button type="primary"><a href="#/openImageAlbum" class="topcenter">前往相册</a></el-button>
+        </el-col>
       </el-row>
     </div>
     <div class="bottomClass">

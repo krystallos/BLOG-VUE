@@ -45,9 +45,6 @@
           <span class="blosMsgSpan">2022.10 首次对博客功能进行升级，引入图片深度学习功能</span>
         </el-timeline-item>
         <el-timeline-item>
-          <span class="blosMsgSpan">2023.01 图床升级，支持除基本图片格式外的更多格式，支持异地备份同步和手动录入功能</span>
-        </el-timeline-item>
-        <el-timeline-item>
           <span class="blosMsgSpan">2023.06 网站整体升级，从原先的LayerUI升级为ElmUI，后端改为Spring分布式部署</span>
         </el-timeline-item>
         <el-timeline-item>
@@ -55,6 +52,9 @@
         </el-timeline-item>
         <el-timeline-item>
           <span class="blosMsgSpan">2024.07 图形图像采用基于深度学习的各向同性ConvNeXt-T模型，再次提升爬虫智能化</span>
+        </el-timeline-item>
+        <el-timeline-item>
+          <span class="blosMsgSpan">2025.01 新增家庭相册功能，整合相册自动分类</span>
         </el-timeline-item>
         <el-timeline-item>
           <span class="blosMsgSpan">新的一年，新的计划部署......</span>

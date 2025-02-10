@@ -139,6 +139,13 @@ export const constantRoutes = [
     component: () => import('@/views/openApi/imageShare/imageShare.vue'),
     name: '分享图片'
   },
+  //云相册
+  {
+    path: '/openImageAlbum',
+    alwaysShow: true,
+    component: () => import('@/views/openApi/openImageAlbum/openImageAlbum.vue'),
+    name: '云相册'
+  },
   //404
   {
     path: '/404',
