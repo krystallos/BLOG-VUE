@@ -26,3 +26,12 @@ export function editEhentaiFileApi(data) {
     data
   })
 }
+
+// 获取文件
+export function openEhentaiFileApi(data) {
+  return request({
+    url: '/api/openEhentaiFile.act',
+    method: 'post',
+    data
+  })
+}
